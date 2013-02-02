@@ -15,5 +15,5 @@ $app = new Igorw\Middleware\Logger(
     new Monolog\Logger('app')
 );
 
-$request = Request::createFromGlobals();
-$app->handle($request)->send();
+$request = Request::create('/');
+$response = $app->handle($request)->send();
