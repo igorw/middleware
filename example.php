@@ -9,7 +9,8 @@ use Symfony\Component\HttpKernel\HttpCache\Store;
 require 'vendor/autoload.php';
 
 $app = new CallableHttpKernel(function (Request $request) {
-    return new Response("Hello World!\n");
+    return (new Response("Hello World!\n"))
+        ->setCache(['s_maxage' => 20]);
 });
 
 $stack = new Stack($app);
