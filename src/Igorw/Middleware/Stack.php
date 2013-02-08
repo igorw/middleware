@@ -24,6 +24,8 @@ class Stack
         $app = $this->app;
         $specs = array_reverse($this->specs);
 
+        $middlewares = [$app];
+
         foreach ($specs as $spec) {
             $args = $spec;
             $kernelClass = array_shift($args);
@@ -31,8 +33,9 @@ class Stack
 
             $reflection = new \ReflectionClass($kernelClass);
             $app = $reflection->newInstanceArgs($args);
+            array_unshift($middlewares, $app);
         }
 
-        return $app;
+        return new StackedHttpKernel($app, $middlewares);
     }
 }

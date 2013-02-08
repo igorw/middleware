@@ -17,5 +17,8 @@ $stack = new Stack($app);
 $stack->push('Igorw\Middleware\Logger', new Monolog\Logger('app'));
 $stack->push('Symfony\Component\HttpKernel\HttpCache\HttpCache', new Store(__DIR__.'/cache'));
 
+$app = $stack->resolve();
+
 $request = Request::create('/');
-$stack->resolve()->handle($request)->send();
+$response = $app->handle($request)->send();
+$app->terminate($request, $response);

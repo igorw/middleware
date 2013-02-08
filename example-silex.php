@@ -1,5 +1,6 @@
 <?php
 
+use Igorw\Middleware\Stack;
 use Symfony\Component\HttpFoundation\Request;
 
 require 'vendor/autoload.php';
@@ -10,10 +11,15 @@ $app->get('/', function () {
     return "Hello World!\n";
 });
 
-$app = new Igorw\Middleware\Logger(
-    $app,
-    new Monolog\Logger('app')
-);
+$app->finish(function () {
+    echo "Silex finish event fired.\n";
+});
+
+$stack = new Stack($app);
+$stack->push('Igorw\Middleware\Logger', new Monolog\Logger('app'));
+
+$app = $stack->resolve();
 
 $request = Request::create('/');
 $response = $app->handle($request)->send();
+$app->terminate($request, $response);
