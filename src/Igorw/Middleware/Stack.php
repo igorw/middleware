@@ -6,22 +6,17 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class Stack
 {
-    private $app;
     private $specs = [];
-
-    public function __construct(HttpKernelInterface $app)
-    {
-        $this->app = $app;
-    }
 
     public function push(/*$kernelClass, $args...*/)
     {
         $this->specs[] = func_get_args();
+
+        return $this;
     }
 
-    public function resolve()
+    public function resolve(HttpKernelInterface $app)
     {
-        $app = $this->app;
         $specs = array_reverse($this->specs);
 
         $middlewares = [$app];

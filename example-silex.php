@@ -15,10 +15,10 @@ $app->finish(function () {
     echo "Silex finish event fired.\n";
 });
 
-$stack = new Stack($app);
+$stack = new Stack();
 $stack->push('Igorw\Middleware\Logger', new Monolog\Logger('app'));
 
-$app = $stack->resolve();
+$app = $stack->resolve($app);
 
 $request = Request::create('/');
 $response = $app->handle($request)->send();

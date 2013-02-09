@@ -13,11 +13,11 @@ $app = new CallableHttpKernel(function (Request $request) {
         ->setCache(['s_maxage' => 20]);
 });
 
-$stack = new Stack($app);
-$stack->push('Igorw\Middleware\Logger', new Monolog\Logger('app'));
-$stack->push('Symfony\Component\HttpKernel\HttpCache\HttpCache', new Store(__DIR__.'/cache'));
+$stack = (new Stack())
+    ->push('Igorw\Middleware\Logger', new Monolog\Logger('app'))
+    ->push('Symfony\Component\HttpKernel\HttpCache\HttpCache', new Store(__DIR__.'/cache'));
 
-$app = $stack->resolve();
+$app = $stack->resolve($app);
 
 $request = Request::create('/');
 $response = $app->handle($request)->send();
